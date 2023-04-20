@@ -1,21 +1,27 @@
 #!/usr/bin/python3
 
+#Tyler Housden
+#Received help from reviewing Sierra and company code
+
 #Import libraries
 import os, time, smtplib 
 from datetime import datetime
 from getpass import getpass 
 
-#prompts for email to use for notifications.
-
+# Assign variables
 currentTime = datetime.now()
-up = 0
-down = 1
-last = 0
+up = "Server up"
+down = "Server down"
+
+
+#prompts for email to use for notifications.
 email = input("Please enter your email address\n")
 pw = getpass("Please enter the password\n")
 #asks user for input of ip address
 IP = input("Please enter an IP address\n")
 print("\n")
+
+# function for email notification (server is up)
 def send_downmessage():
     #create SMTP session
     s = smtplib.SMTP('smtp.gmail.com', 587)
@@ -24,13 +30,27 @@ def send_downmessage():
     # Authentication
     s.login(email, pw)
     # Message 
-    message = ("Subject: Python script\n\nYour server is not serving " + currentTime)
+    message = ("Subject: Python script\n\nYour server is not serving " )
     s.sendmail("pingbeat@bot.com",email, message)
     # Terminate Session
     s.quit()
+# function for email notification (server is up)
 
-def send_upmessage():
-    
+
+
+# function for ping and comparing previous ping status with current.
+def ping_test(IP): 
+    global last
+    ping_result = os.system("ping -c 1 " + IP)
+        #Check if host is up or down
+    if ping_result == 0:
+        stat = up
+        
+    elif ping_result != 0:
+        stat = down
+    return stat
+def send_message(stat):
+
     #create SMTP session
     s = smtplib.SMTP('smtp.gmail.com', 587)
     # start TLS for security
@@ -38,24 +58,20 @@ def send_upmessage():
     # Authentication
     s.login(email, pw)
     # Message 
-    message = ("Subject: Python script\n\n\Your server is serving " + currentTime)
-    s.sendmail("pingbeat@bot.com",email, message)
+    message = f"SErver is {stat.lower()}"
+    s.sendmail(email,email, message)
     # Terminate Session
     s.quit()
 
-def ping_test(): 
-    global last
-    ping_result = os.system("ping -c 1 " + IP)
-        #Check if host is up or down
-    if  ((ping_result != last) and (ping_result == up)):
-        last = up
-        send_upmessage()
-    elif ((ping_result != last) and (ping_result == down)):
-        last = down
-        send_downmessage()
+last = ping_test(IP)
 
 #Infinite loops to keep pinging target
 while True:
-#creates function for ping and status 
-    ping_test()
+    current_stat = ping_test(IP)
+    if current_stat != last:
+#calls function 
+        send_message(current_stat)
+        last = current_stat
+
+# gives 2 second wait time before continuing loop 
     time.sleep(2)
