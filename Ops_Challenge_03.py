@@ -10,8 +10,8 @@ from getpass import getpass
 
 # Assign variables
 currentTime = datetime.now()
-up = "Server up"
-down = "Server down"
+up = "Up"
+down = "Down"
 
 
 #prompts for email to use for notifications.
@@ -20,23 +20,6 @@ pw = getpass("Please enter the password\n")
 #asks user for input of ip address
 IP = input("Please enter an IP address\n")
 print("\n")
-
-# function for email notification (server is up)
-def send_downmessage():
-    #create SMTP session
-    s = smtplib.SMTP('smtp.gmail.com', 587)
-    # start TLS for security
-    s.starttls()
-    # Authentication
-    s.login(email, pw)
-    # Message 
-    message = ("Subject: Python script\n\nYour server is not serving " )
-    s.sendmail("pingbeat@bot.com",email, message)
-    # Terminate Session
-    s.quit()
-# function for email notification (server is up)
-
-
 
 # function for ping and comparing previous ping status with current.
 def ping_test(IP): 
@@ -58,7 +41,7 @@ def send_message(stat):
     # Authentication
     s.login(email, pw)
     # Message 
-    message = f"SErver is {stat.lower()}"
+    message = f"Server is {stat.lower()}"
     s.sendmail(email,email, message)
     # Terminate Session
     s.quit()
