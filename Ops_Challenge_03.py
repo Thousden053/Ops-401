@@ -13,7 +13,6 @@ currentTime = datetime.now()
 up = "Up"
 down = "Down"
 
-
 #prompts for email to use for notifications.
 email = input("Please enter your email address\n")
 pw = getpass("Please enter the password\n")
