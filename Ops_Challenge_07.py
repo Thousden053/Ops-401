@@ -3,7 +3,7 @@
 #Tyler Housden
 
 
-import os
+import os, time
 from cryptography.fernet import Fernet
 
 # Declare Functions
@@ -22,7 +22,7 @@ def load_key():
 
 # Function for displaying the menu
 def display_menu():
-    menu = ["1: Encrypt a file", "2: Decrypt a file", "3: Encrypt a message", "4: Decrypt a message", "5: Exit", "6: Encrypt a folder", "7: Decrypt a folder"]
+    menu = ["1: Encrypt a file", "2: Decrypt a file", "3: Encrypt a message", "4: Decrypt a message", "5: Encrypt a folder", "6: Decrypt a folder", "7: Exit"]
     for i in menu:
         print(i)
 
@@ -82,35 +82,41 @@ print("Your key is: " + str(key.decode('utf-8')))
 # Main loop
 while True:
     display_menu()
-    mode = input("Please select a mode: ")
+    mode = input("Please select a mode: \n")
 
-    if mode in ["1", "2"]:
-        # ... (file processing)
-        file_name = input("Enter file name: ")
-        processed_data = process_file(mode, file_name, key)
+    if mode in ["1", "2"]: #checks if mode is 1 or 2 from previous input
+        file_name = input("Enter file name: ") #asks for file name
+        processed_data = process_file(mode, file_name, key) #stores process_file function into processed_data
         if mode == "1":
             print("Encrypted message is: " + processed_data.decode('utf-8'))
         elif mode == "2":
             print("Decrypted message is: " + processed_data.decode('utf-8'))
 
-    elif mode in ["3", "4"]:
-        # ... (message processing)
-        message = input("Enter message: ")
-        processed_data = process_message(mode, message, key)
+    elif mode in ["3", "4"]: #checks if mode is 3 or 4 from previous input
+        message = input("Enter message: ") #asks for a message
+        processed_data = process_message(mode, message, key) #stores process_message function into processed_data
         if mode == "3":
             print("Encrypted message is: " + processed_data.decode('utf-8'))
                 # ... (message processing continued)
         elif mode == "4":
             print("Decrypted message is: " + processed_data.decode('utf-8'))
 
+    elif mode == "5":
+        folder_path = input("Enter folder path to encrypt: ") #asks for a folder path
+        encrypt_folder(folder_path, key) #calls on function and encrypts folder and its contents
+
     elif mode == "6":
-        folder_path = input("Enter folder path to encrypt: ")
-        encrypt_folder(folder_path, key)
+        folder_path = input("Enter folder path to decrypt: ") #asks for a folder path
+        decrypt_folder(folder_path, key)#calls on function and decrypts folder and its contents
 
     elif mode == "7":
-        folder_path = input("Enter folder path to decrypt: ")
-        decrypt_folder(folder_path, key)
-
-    elif mode == "5":
         exit()
+    else:
+        print(f"""
+You entered {mode}
+That is an invalid input.
+Please input a number between 1 and 7.
+""")
+        time.sleep(2)
+        
 
