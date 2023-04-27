@@ -2,6 +2,8 @@
 
 #Tyler Housden
 
+# took my code from yesterday and asked chat gpt to show me how to implement "dry".
+# took that code and added todays code to it.
 
 import os, time
 from cryptography.fernet import Fernet
