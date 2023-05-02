@@ -7,8 +7,9 @@ import sys
 from scapy.all import sr1, IP, TCP
 
 host = "192.168.1.1" # define the IP address of the host to scan
-port_range = range(1, 1025) # define the range of ports to scan
+port_range = range(22, 23, 80, 443, 3389) # define the range of ports to scan
 
+#for loop to scan all ports 
 for dst_port in port_range:
     src_port = 1025
     response = sr1(IP(dst=host)/TCP(sport=src_port, dport=dst_port, flags="S"), timeout=1, verbose=0)
